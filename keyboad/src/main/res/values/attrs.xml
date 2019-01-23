@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NumKeyView">
+        <attr name="gbColor" format="color|reference"></attr>
+        <attr name="deleteDrawable" format="reference"></attr>
+    </declare-styleable>
+</resources>
