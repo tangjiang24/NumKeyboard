@@ -16,7 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by energy on 2019/1/21.
+ * @Description:自定义键盘NumKeyboard的管理类，
+ * 提供一个构造方法（需传入keyboardview和activity两个参数）
+ * 对外暴露若干方法进行绑定或增加需要弹出自定义键盘的 edittext
+ * 需注意：
+ * bindEditext(...) 会将之前所绑定移除，重新绑定所传入
+ * addEditext(...)  会将所传入edittext加入绑定集合
+ * @Createdtime:2019/1/24 10:10
+ * @Author:TangJiang
+ * @Version: V.1.0.0
  */
 
 public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
@@ -29,69 +37,96 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
     EditText currentEdt;
 
     /**
-     * 适用于 单个edittext都需要调用此键盘的情况
      * @param keyBoardView
      * @param context
-     * @param editText
      */
-    public KeyBoardManager(NumKeyBoardView keyBoardView, Activity context,EditText editText) {
+    public KeyBoardManager(Activity context,NumKeyBoardView keyBoardView) {
         this.keyBoardView = keyBoardView;
         this.context = context;
-        initAnimation();
-        edts.clear();
-        edts.add(editText);
+    }
+
+    /**
+     * 绑定activity所有edittext
+     */
+    public void bindEdits(){
+        unBindEditor();
+        edts = getAllEdittext(context);
         initEdts(edts);
     }
+
     /**
-     * 适用于 指定edittext都需要调用此键盘的情况
-     * @param keyBoardView
-     * @param context
-     * @param editTexts
+     * 绑定fragment所有edittext
      */
-    public KeyBoardManager(NumKeyBoardView keyBoardView, Activity context,List<EditText> editTexts) {
-        this.keyBoardView = keyBoardView;
-        this.context = context;
-        initAnimation();
-        edts = editTexts;
-        initEdts(edts);
-    }
-    /**
-     * 适用于 activity所有edittext都需要调用此键盘的情况
-     * @param keyBoardView
-     * @param context
-     */
-    public KeyBoardManager(NumKeyBoardView keyBoardView, Activity context) {
-        this.keyBoardView = keyBoardView;
-        this.context = context;
-        initAnimation();
-        edts =getAllEdittext(context);
-        initEdts(edts);
-    }
-    /**
-     * 适用于 fragment所有edittext都需要调用此键盘的情况
-     * @param keyBoardView
-     * @param context
-     * @param fragment
-     */
-    public KeyBoardManager(NumKeyBoardView keyBoardView, Activity context,Fragment fragment){
-        this.keyBoardView = keyBoardView;
-        this.context = context;
-        initAnimation();
+    public void bindEdits(Fragment fragment){
+        unBindEditor();
         edts = getAllEdittext(fragment.getView());
         initEdts(edts);
     }
 
     /**
-     * 适用于 viewGroup子view中所有edittext都需要调用此键盘的情况
-     * @param keyBoardView
-     * @param context
+     * 绑定单个editText
+     * @param editText
+     */
+    public void bindEdits(EditText editText){
+        unBindEditor();
+        edts.clear();
+        edts.add(editText);
+        initEdts(edts);
+    }
+
+    /**
+     * 绑定editText 集合
+     * @param editTexts
+     */
+    public void bindEdits(List<EditText> editTexts){
+        unBindEditor();
+        edts = editTexts;
+        initEdts(edts);
+    }
+
+    /**
+     * 绑定viewgroup内所有editText
      * @param viewGroup
      */
-    public KeyBoardManager(NumKeyBoardView keyBoardView, Activity context,View viewGroup){
-        this.keyBoardView = keyBoardView;
-        this.context = context;
-        initAnimation();
+    public void bindEdits(View viewGroup){
+        unBindEditor();
+        edts.clear();
         edts = getAllEdittext(viewGroup);
+        initEdts(edts);
+    }
+
+    /**
+     * 增加fragment所有edittext
+     */
+    public void addEdits(Fragment fragment){
+        edts.addAll(getAllEdittext(fragment.getView()));
+        initEdts(edts);
+    }
+
+    /**
+     * 增加单个editText
+     * @param editText
+     */
+    public void addEdits(EditText editText){
+        edts.add(editText);
+        initEdts(edts);
+    }
+
+    /**
+     * 增加editText 集合
+     * @param editTexts
+     */
+    public void addEdits(List<EditText> editTexts){
+        edts.addAll(editTexts);
+        initEdts(edts);
+    }
+
+    /**
+     * 增加viewgroup内所有editText
+     * @param viewGroup
+     */
+    public void addEdits(View viewGroup){
+        edts.addAll(getAllEdittext(viewGroup));
         initEdts(edts);
     }
 
@@ -102,7 +137,6 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
     private void initEdts(final List<EditText> edts) {
         if(edts==null|| edts.size()<=0) return;
         currentEdt = edts.get(0);
-        bindToEditor();
         for(final EditText et : edts){
             forbidenSystemSoftKey(et);
             et.setOnTouchListener(new View.OnTouchListener() {
@@ -119,6 +153,7 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
                 }
             });
         }
+        bindToEditor();
     }
 
     /**
@@ -126,6 +161,11 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      */
     private void bindToEditor() {
         if(currentEdt==null)return;
+        if(currentEdt.getInputType()==InputType.TYPE_NULL){
+            currentEdt.setFocusable(true);
+            currentEdt.setFocusableInTouchMode(true);
+            currentEdt.requestFocus();
+        }
         currentEdt.setOnFocusChangeListener(editorFocusChangeListener);
         if(currentEdt.hasFocus()){
             showSoftKeyboard(currentEdt);
@@ -133,6 +173,20 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
         keyBoardView.setOnKeyPressListener(this);
     }
 
+    /**
+     * 解绑所有的edittext
+     */
+    private void unBindEditor(){
+        for(EditText et : edts){
+            et.setOnFocusChangeListener(null);
+            et.setOnTouchListener(null);
+        }
+    }
+
+    /**
+     * 追加一个字符
+     * @param text
+     */
     @Override
     public void onInertKey(String text) {
         String content = currentEdt.getText().toString();
@@ -145,6 +199,9 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
         }
     }
 
+    /**
+     * 删除键
+     */
     @Override
     public void onDeleteKey() {
         String content = currentEdt.getText().toString();
@@ -155,6 +212,9 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
         }
     }
 
+    /**
+     * 微调增加的方法
+     */
     @Override
     public void onAddData() {
         String content = currentEdt.getText().toString();
@@ -175,6 +235,9 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
         }
     }
 
+    /**
+     * 微调减少的方法
+     */
     @Override
     public void onDelData() {
         String content = currentEdt.getText().toString();
@@ -195,18 +258,21 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
         }
     }
 
+    /**
+     * 获取下一个编辑项
+     */
     @Override
     public void onNext() {
         if(edts.size()>next+1){  //还有下一项
             next++;
             currentEdt = edts.get(next);
-            currentEdt.setFocusable(true);
-            currentEdt.setFocusableInTouchMode(true);
-            currentEdt.requestFocus();
             KeyBoardManager.this.bindToEditor();
         }
     }
 
+    /**
+     * 取消
+     */
     @Override
     public void onCancle() {
         hideSoftKeyboard();
