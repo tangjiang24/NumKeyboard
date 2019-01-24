@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         keyBoardView = (NumKeyBoardView) findViewById(R.id.keyboad);
         etContainer = (LinearLayout) findViewById(R.id.etContainer);
         keyBoardManager = new KeyBoardManager(this,keyBoardView);
+        keyBoardManager.bindEdits();
     }
 
     @Override

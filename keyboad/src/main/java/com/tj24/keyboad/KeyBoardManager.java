@@ -161,14 +161,14 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      */
     private void bindToEditor() {
         if(currentEdt==null)return;
-        if(currentEdt.getInputType()==InputType.TYPE_NULL){
-            currentEdt.setFocusable(true);
-            currentEdt.setFocusableInTouchMode(true);
-            currentEdt.requestFocus();
-        }
+        currentEdt.performClick();
         currentEdt.setOnFocusChangeListener(editorFocusChangeListener);
+//        currentEdt.setFocusable(true);
+//        currentEdt.setFocusableInTouchMode(true);
+//        currentEdt.requestFocus();
+
         if(currentEdt.hasFocus()){
-            showSoftKeyboard(currentEdt);
+            showSoftKeyboard();
         }
         keyBoardView.setOnKeyPressListener(this);
     }
@@ -287,10 +287,10 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
             if (v instanceof EditText) {
                 EditText et = (EditText) v;
                 if (hasFocus) {
-                    v.postDelayed(new Runnable() {
+                    et.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            showSoftKeyboard((EditText) v);
+                            showSoftKeyboard();
                         }
                     },300);
                 }else {
@@ -304,10 +304,12 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
 
     /**
      * 显示软键盘
-     * @param editText
+     * @param
      */
-    public void showSoftKeyboard(EditText editText) {
-        hideSoftKeyboard(edts);
+    public void showSoftKeyboard() {
+//        if(context.getWindow().getAttributes().softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE){
+            hideSystemSoftKeyboard(edts);
+//        }
         if(keyBoardView.getVisibility()==View.VISIBLE){
             return;
         }
@@ -368,7 +370,7 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      * 隐藏软键盘(可用于Activity，Fragment)
      * @param viewList 可触发系统软键盘弹出的view集合
      */
-    public void hideSoftKeyboard(List<EditText> viewList) {
+    private void hideSystemSoftKeyboard(List<EditText> viewList) {
         if (viewList == null) return;
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         for (View v : viewList) {
