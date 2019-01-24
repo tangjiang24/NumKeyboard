@@ -161,12 +161,11 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      */
     private void bindToEditor() {
         if(currentEdt==null)return;
-        currentEdt.performClick();
         currentEdt.setOnFocusChangeListener(editorFocusChangeListener);
-//        currentEdt.setFocusable(true);
-//        currentEdt.setFocusableInTouchMode(true);
-//        currentEdt.requestFocus();
-
+        currentEdt.setFocusable(true);
+        currentEdt.setFocusableInTouchMode(true);
+        currentEdt.requestFocus();
+        currentEdt.performClick();
         if(currentEdt.hasFocus()){
             showSoftKeyboard();
         }
