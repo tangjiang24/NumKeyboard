@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFragment.setOnClickListener(this);
         keyBoardView = (NumKeyBoardView) findViewById(R.id.keyboad);
         etContainer = (LinearLayout) findViewById(R.id.etContainer);
+        keyBoardManager = new KeyBoardManager(this,keyBoardView);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_single:
-                keyBoardManager = new KeyBoardManager(keyBoardView,this,et);
+                keyBoardManager.addEdits(et);
                 break;
             case R.id.btn_many:
                 List<EditText> ets =new ArrayList<>();
@@ -73,10 +74,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ets.add(et3);
                 ets.add(et4);
                 ets.add(et5);
-                keyBoardManager = new KeyBoardManager(keyBoardView,this,ets);
+                keyBoardManager.bindEdits(ets);
                 break;
             case R.id.btn_view:
-                keyBoardManager = new KeyBoardManager(keyBoardView,this,etContainer);
+                keyBoardManager.bindEdits(etContainer);
                 break;
             case R.id.btn_fragment:
                 startActivity(new Intent(this,FragmentActivity.class));

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content">
             <Button
                 android:id="@+id/btn_single"
-                android:text="单个editText(第一个)"
+                android:text="增加单个editText(第一个)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <Button

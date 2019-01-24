@@ -38,7 +38,13 @@ public class KeyBoardFragment extends Fragment {
         et = (EditText) view.findViewById(R.id.et);
         keyBoardView = (NumKeyBoardView) view.findViewById(R.id.keyboad);
         etContainer = (LinearLayout) view.findViewById(R.id.etContainer);
-        keyBoardManager = new KeyBoardManager(keyBoardView, (Activity) context,etContainer);
+        keyBoardManager = new KeyBoardManager((Activity) context,keyBoardView);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        keyBoardManager.bindEdits(this);
     }
 }
