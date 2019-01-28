@@ -186,18 +186,19 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
     }
 
     /**
-     * 追加一个字符
+     * 指定光标位置追加一个字符
      * @param text
      */
     @Override
     public void onInertKey(String text) {
         String content = currentEdt.getText().toString();
+        int position = getEditTextCursorIndex(currentEdt);
         if(!text.equals(".")){
             if(!content.equals("0")){
-                currentEdt.append(text);
+                currentEdt.getText().insert(position,text);
             }
         }else if(content!=null && content.length()>0 && !content.contains(".")){
-            currentEdt.append(text);
+            currentEdt.getText().insert(position,text);
         }
     }
 
@@ -207,10 +208,9 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
     @Override
     public void onDeleteKey() {
         String content = currentEdt.getText().toString();
-        if(content!=null && content.length()>0){
-            content = content.substring(0,content.length()-1);
-            currentEdt.setText(content);
-            currentEdt.setSelection(content.length());
+        int position = getEditTextCursorIndex(currentEdt);
+        if(content!=null && !content.equals("") && position>0){
+          currentEdt.getText().delete(position-1, position);
         }
     }
 
@@ -414,5 +414,14 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
             }
         }
         return allEdittext;
+    }
+
+    /**
+     * 获取EditText光标所在的位置
+     * @param mEditText
+     * @return
+     */
+    private int getEditTextCursorIndex(EditText mEditText){
+        return mEditText.getSelectionStart();
     }
 }
