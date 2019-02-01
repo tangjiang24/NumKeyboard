@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"/>
             <EditText
                 android:id="@+id/et"
+                android:imeOptions="actionNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Hello World!"
@@ -47,30 +48,35 @@
             <EditText
                 android:id="@+id/et1"
                 android:hint="1"
+                android:imeOptions="actionNext"
                 android:layout_below="@+id/et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
                 android:id="@+id/et2"
                 android:hint="2"
+                android:imeOptions="actionNext"
                 android:layout_below="@+id/et1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
                 android:id="@+id/et3"
                 android:hint="3"
+                android:imeOptions="actionNext"
                 android:layout_below="@+id/et2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
                 android:id="@+id/et4"
                 android:hint="4"
+                android:imeOptions="actionNext"
                 android:layout_below="@+id/et2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <EditText
                 android:id="@+id/et5"
                 android:hint="5"
+                android:imeOptions="actionNext"
                 android:layout_below="@+id/et2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

@@ -3,6 +3,7 @@ package com.tj24.keyboad;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -191,6 +192,7 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      */
     @Override
     public void onInertKey(String text) {
+//        自己写的逻辑
         String content = currentEdt.getText().toString();
         int position = getEditTextCursorIndex(currentEdt);
         if(!text.equals(".")){
@@ -200,6 +202,7 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
         }else if(content!=null && content.length()>0 && !content.contains(".")){
             currentEdt.getText().insert(position,text);
         }
+
     }
 
     /**
@@ -207,11 +210,19 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      */
     @Override
     public void onDeleteKey() {
-        String content = currentEdt.getText().toString();
-        int position = getEditTextCursorIndex(currentEdt);
-        if(content!=null && !content.equals("") && position>0){
-          currentEdt.getText().delete(position-1, position);
-        }
+//        自己写的逻辑
+//        String content = currentEdt.getText().toString();
+//        int position = getEditTextCursorIndex(currentEdt);
+//        if(content!=null && !content.equals("") && position>0){
+//          currentEdt.getText().delete(position-1, position);
+//        }
+
+//        利用系统的方法
+        int keyCode = KeyEvent.KEYCODE_DEL;
+        KeyEvent keyEventDown = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+        KeyEvent keyEventUp = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
+        currentEdt.onKeyDown(keyCode, keyEventDown);
+        currentEdt.onKeyUp(keyCode, keyEventUp);
     }
 
     /**
