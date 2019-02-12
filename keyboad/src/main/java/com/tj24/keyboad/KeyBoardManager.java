@@ -21,8 +21,10 @@ import java.util.List;
  * 提供一个构造方法（需传入keyboardview和activity两个参数）
  * 对外暴露若干方法进行绑定或增加需要弹出自定义键盘的 edittext
  * 需注意：
- * bindEditext(...) 会将之前所绑定移除，重新绑定所传入
+ * 1.bindEditext(...) 会将之前所绑定移除，重新绑定所传入
  * addEditext(...)  会将所传入edittext加入绑定集合
+ *2.目前暂不支持recyclerView中的edittext（不超出一页除外）
+ *
  * @Createdtime:2019/1/24 10:10
  * @Author:TangJiang
  * @Version: V.1.0.0
@@ -180,6 +182,7 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
      * 解绑所有的edittext
      */
     private void unBindEditor(){
+        next = 0;
         for(EditText et : edts){
             et.setOnFocusChangeListener(null);
             et.setOnTouchListener(null);
