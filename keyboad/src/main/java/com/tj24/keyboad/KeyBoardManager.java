@@ -283,6 +283,8 @@ public class KeyBoardManager implements NumKeyBoardView.OnKeyPressListener {
             next++;
             currentEdt = edts.get(next);
             KeyBoardManager.this.bindToEditor();
+        }else {
+            hideSoftKeyboard();
         }
     }
 
